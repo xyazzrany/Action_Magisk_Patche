@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       rom_url:
-        description: 'ROM 下载直链'
+        description: 'https://www.coolapk.com/feed/45425685?shareKey=Nzc2YTU2NTQ3ZjdmNjQ0NTUxZWU~&shareUid=6848370&shareFrom=com.coolapk.market_13.1.2'
         required: true
         default: ''
 
