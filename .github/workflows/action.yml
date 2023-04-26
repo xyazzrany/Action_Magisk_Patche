@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       rom_url:
-        description: 'ROM 下载直链'
+        description: '卡刷包ROM 下载直链'
         required: true
         default: 'https://bigota.d.miui.com/V14.0.5.0.TKPCNXM/miui_CHOPIN_V14.0.5.0.TKPCNXM_242d1a6ff5_13.0.zip'
 
