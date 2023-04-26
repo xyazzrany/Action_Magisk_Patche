@@ -1,0 +1,45 @@
+name: delete_runs
+
+on:
+  schedule:
+    - cron: '0 22 * * *' # 北京时间早上6点
+    
+  watch:
+    types: [started]
+
+
+jobs:
+  delete_runs:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: new delete.py
+        run: |
+          cat << EOF > delete.py
+          import requests
+          # Define API endpoint and headers
+          url = 'https://api.github.com/repos/xyazzrany/Action_Magisk_PATCHE/actions/runs'
+          headers = {'Authorization': 'Bearer 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'}
+
+          # Get list of workflow runs
+          response = requests.get(url, headers=headers)
+          response_json = response.json()
+          runs = response_json['workflow_runs']
+
+          # Loop through workflow runs and delete them
+          for run in runs:
+              # Define API endpoint for deleting workflow run
+              delete_url = f"{url}/{run['id']}"
+              # Send DELETE request to API
+              delete_response = requests.delete(delete_url, headers=headers)
+              # Print ID and status code of deleted workflow run
+              print(f"Deleted workflow run {run['id']}. Status code: {delete_response.status_code}")
+          EOF
+
+      - name: use delete.py
+        run: | 
+          python3 delete.py
+
+
+
+
