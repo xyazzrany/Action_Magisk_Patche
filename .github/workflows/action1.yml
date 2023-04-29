@@ -1,0 +1,64 @@
+name: 从ROM提取init_boot并修补
+
+on:
+  workflow_dispatch:
+    inputs:
+      rom_url:
+        description: '卡刷包ROM 下载直链'
+        required: true
+        default: 'https://bigota.d.miui.com/V14.0.10.0.TMACNXM/miui_ISHTAR_V14.0.10.0.TMACNXM_2ec0d6548d_13.0.zip'
+
+jobs:
+  magisk_upack:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v2
+
+      - name: 安装依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install aria2 unzip
+          BUILD_TIME=$(TZ=Asia/Shanghai date +"%m%d%H%M")
+          echo "BUILD_TIME=$BUILD_TIME" >> $GITHUB_ENV
+      - name: 提取镜像
+        run: |
+          cd ${{ github.workspace }}
+          aria2c -s 10 -x 10 -d . -o firmware.zip "${{ github.event.inputs.rom_url }}"
+          unzip firmware.zip
+          chmod +x ./payload-dumper-go
+          ./payload-dumper-go -p init_boot payload.bin
+          
+      - name: 修补boot
+        run: |
+          cd ~
+          git clone https://github.com/xyazzrany/Magisk_patche.git -b delta
+          cd Magisk
+          mv ${{ github.workspace }}/out/* ./
+          mkdir done
+          ./boot.sh
+      - name: 提交信息
+        run: |
+          cd ${{ github.workspace }}
+          touch info.md
+          echo "提交日期：$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')" >> info.md
+          echo "下载直链：${{ github.event.inputs.boot_url }}" >> info.md
+
+      - name: 上传到阿里云盘
+        run: |
+          sudo apt-get update
+          python3 -m venv $PWD/venv
+          pip3 install -U aligo
+          pip install -U aligo
+          python3 aliyun.py
+
+
+      - name: 上传镜像
+        uses: ncipollo/release-action@v1.12.0
+        with:
+            artifacts: "~/Magisk/done/*"
+            bodyfile: "${{ github.workspace }}/info.md"
+            tag: "Magisk_${{ env.BUILD_TIME }}_${{ github.run_id }}"
+            token: ${{ secrets.GITHUB_TOKEN }}
