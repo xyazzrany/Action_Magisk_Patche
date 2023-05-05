@@ -1,4 +1,4 @@
-# Action_Magisk_PATCHE
+# Action_Magisk_Patche
 test
 **这是一个用来修补 boot.img / init_boot.img 的 Github Action 项目**
 
@@ -23,7 +23,7 @@ Fork 本仓库，在 Action 界面内选择 “直接修补boot 或者是 从ROM
 
 感谢 [tosasitill](https://github.com/tosasitill)的项目给我的想法
 
-# Action_Magisk_PATCHE
+# Action_Magisk_Patche
 
 **This is a Github Action project to patch boot.img / init_boot.img**
 
