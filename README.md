@@ -2,7 +2,6 @@
 test
 **这是一个用来修补 boot.img / init_boot.img 的 Github Action 项目**
 
-## 修补完可以在我的[网盘](http://www.lrios.ml)根据时间下载你修补的boot
 
 ## Usage
 
@@ -27,7 +26,6 @@ Fork 本仓库，在 Action 界面内选择 “直接修补boot 或者是 从ROM
 
 **This is a Github Action project to patch boot.img / init_boot.img**
 
-## After patching, you can download your patched boot from my [network disk](http://www.lrios.ml)) according to the time
 
 ## Usage
 
